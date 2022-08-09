@@ -6,13 +6,14 @@ import re
 def gen_files_path(path_work: str, find_o: str, list_dir_magaz: list) -> Iterable[str]:
     """
     функция-генератор рекурсивно обходит рабочую папку и ищет в ней нужный файл
+    собирает вместе путь до файла и сам файл
     :param path_work: str рабочая папка которую обходим
     :param find_o: str файл которую ищем
     """
     for base_path, sub_path, files_in_path in os.walk(path_work):
-        res = re.search(find_o, '*'.join(files_in_path))
-        if res is not None:
-            list_dir_magaz.append(base_path)
+        for res in files_in_path:
+            if re.fullmatch(find_o, res) is not None:
+                list_dir_magaz.append(base_path + '\\' + res)
         else:
             yield base_path
 
